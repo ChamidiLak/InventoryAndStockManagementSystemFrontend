@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Maintenance Request Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Maintenance Requests</h3>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRequestModal">
+      + Add Request
+    </button>
+  </div>
+
+  <button class="btn btn-secondary mb-3" onclick="fetchRequests(true)">Sort by Date</button>
+
+  <table class="table table-bordered">
+    <thead class="table-primary">
+    <tr>
+      <th>ID</th>
+      <th>Item Name</th>
+      <th>Problem</th>
+      <th>Date</th>
+      <th>Handled By</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="requestsBody"></tbody>
+  </table>
+
+</div>
+
+<!-- Add Request Modal -->
+<div class="modal fade" id="addRequestModal" tabindex="-1" aria-labelledby="addRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="addForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addRequestModalLabel">Add Maintenance Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="itemName" class="form-control mb-3" placeholder="Item Name" required />
+        <input type="text" id="problemDescription" class="form-control mb-3" placeholder="Problem Description" required />
+        <input type="date" id="requestDate" class="form-control mb-3" required />
+        <input type="text" id="handledBy" class="form-control mb-3" placeholder="Handled By" required />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Add</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Update Request Modal -->
+<div class="modal fade" id="updateRequestModal" tabindex="-1" aria-labelledby="updateRequestModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="updateForm" class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateRequestModalLabel">Update Maintenance Request</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="hideUpdateForm()"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="updateId" />
+        <input type="text" id="updateItemName" class="form-control mb-3" placeholder="Item Name" required />
+        <input type="text" id="updateProblemDescription" class="form-control mb-3" placeholder="Problem Description" required />
+        <input type="date" id="updateRequestDate" class="form-control mb-3" required />
+        <input type="text" id="updateHandledBy" class="form-control mb-3" placeholder="Handled By" required />
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Update</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="hideUpdateForm()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="container text-center mt-3">
+  <div id="message" class="text-success fw-bold"></div>
+</div>
+
+<script>
+  const API_URL = "http://localhost:8080/maintenance";
+
+  document.addEventListener("DOMContentLoaded", function () {
+    fetchRequests();
+
+    document.getElementById("addForm").onsubmit = async function (e) {
+      e.preventDefault();
+      const data = {
+        itemName: document.getElementById("itemName").value,
+        problemDescription: document.getElementById("problemDescription").value,
+        requestDate: document.getElementById("requestDate").value,
+        handledBy: document.getElementById("handledBy").value,
+      };
+      const res = await fetch(`${API_URL}/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      showMessage(await res.text());
+    fetchRequests();
+    const addModal = bootstrap.Modal.getInstance(document.getElementById("addRequestModal"));
+    addModal.hide();
+    e.target.reset();
+  };
+
+  document.getElementById("updateForm").onsubmit = async function (e) {
+    e.preventDefault();
+    const id = document.getElementById("updateId").value;
+    const data = {
+      itemName: document.getElementById("updateItemName").value,
+      problemDescription: document.getElementById("updateProblemDescription").value,
+      requestDate: document.getElementById("updateRequestDate").value,
+      handledBy: document.getElementById("updateHandledBy").value,
+    };
+    const res = await fetch(`${API_URL}/update/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    showMessage(await res.text());
+    fetchRequests();
+    const updateModal = bootstrap.Modal.getInstance(document.getElementById("updateRequestModal"));
+    updateModal.hide();
+  };
+  });
+
+  async function fetchRequests(sorted = false) {
+    const res = await fetch(`${API_URL}/all${sorted ? "?sorted=true" : ""}`);
+    const requests = await res.json();
+    const tbody = document.getElementById("requestsBody");
+    tbody.innerHTML = "";
+    requests.forEach((req) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${req.requestId}</td>
+        <td>${req.itemName}</td>
+        <td>${req.problemDescription}</td>
+        <td>${req.requestDate}</td>
+        <td>${req.handledBy}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-1" onclick="showUpdateForm(${req.requestId}, '${escape(
+              req.itemName
+      )}', '${escape(req.problemDescription)}', '${req.requestDate}', '${escape(req.handledBy)}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRequest(${req.requestId})">Delete</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function showUpdateForm(id, itemName, problemDescription, requestDate, handledBy) {
+    document.getElementById("updateId").value = id;
+    document.getElementById("updateItemName").value = unescape(itemName);
+    document.getElementById("updateProblemDescription").value = unescape(problemDescription);
+    document.getElementById("updateRequestDate").value = requestDate;
+    document.getElementById("updateHandledBy").value = unescape(handledBy);
+    const updateModal = new bootstrap.Modal(document.getElementById("updateRequestModal"));
+    updateModal.show();
+  }
+
+  function hideUpdateForm() {
+    const updateModal = bootstrap.Modal.getInstance(document.getElementById("updateRequestModal"));
+    if (updateModal) updateModal.hide();
+  }
+
+  async function deleteRequest(id) {
+    if (!confirm("Are you sure you want to delete this request?")) return;
+    const res = await fetch(`${API_URL}/delete/${id}`, { method: "DELETE" });
+    showMessage(await res.text());
+    fetchRequests();
+  }
+
+  function showMessage(msg) {
+    const div = document.getElementById("message");
+    div.innerText = msg;
+    setTimeout(() => (div.innerText = ""), 3000);
+  }
+</script>
+</body>
+</html>

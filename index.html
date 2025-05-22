@@ -1,78 +1,362 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Dashboard</title>-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    <script src="https://kit.fontawesome.com/a2e0c6f91b.js" crossorigin="anonymous"></script>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            background-color: #eaf4ff;-->
+<!--        }-->
+
+<!--        .sidebar {-->
+<!--            height: 100vh;-->
+<!--            background-color: #0056b3;-->
+<!--            padding-top: 20px;-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--        .sidebar a {-->
+<!--            color: white;-->
+<!--            text-decoration: none;-->
+<!--            display: block;-->
+<!--            padding: 15px 20px;-->
+<!--            font-size: 16px;-->
+<!--            transition: background 0.3s ease;-->
+<!--        }-->
+
+<!--        .sidebar a:hover {-->
+<!--            background-color: #339dff;-->
+<!--        }-->
+
+<!--        .sidebar .logo {-->
+<!--            font-size: 24px;-->
+<!--            font-weight: bold;-->
+<!--            text-align: center;-->
+<!--            margin-bottom: 30px;-->
+<!--        }-->
+
+<!--        .sidebar .logo i {-->
+<!--            margin-right: 8px;-->
+<!--        }-->
+
+<!--        .icon {-->
+<!--            margin-right: 10px;-->
+<!--        }-->
+
+<!--        .content-frame {-->
+<!--            border: none;-->
+<!--            width: 100%;-->
+<!--            height: 100vh;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container-fluid">-->
+<!--    <div class="row">-->
+<!--        &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--        <nav class="col-md-2 sidebar">-->
+<!--            <div class="logo">-->
+<!--                <i class="fas fa-rocket"></i> NextGen-->
+<!--            </div>-->
+<!--            <a href="transaction.html" target="contentFrame"><i class="fas fa-exchange-alt icon"></i>Transaction</a>-->
+<!--            <a href="suppliers.html" target="contentFrame"><i class="fas fa-truck icon"></i>Suppliers</a>-->
+<!--            <a href="item.html" target="contentFrame"><i class="fas fa-boxes icon"></i>Items</a>-->
+<!--            <a href="users.html" target="contentFrame"><i class="fas fa-users icon"></i>Users</a>-->
+<!--            <a href="maintenance.html" target="contentFrame"><i class="fas fa-tools icon"></i>Maintenance</a>-->
+<!--        </nav>-->
+
+<!--        &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--        <main class="col-md-10 p-0">-->
+<!--            <iframe name="contentFrame" class="content-frame"></iframe>-->
+<!--        </main>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <title>Inventory Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/a2e0c6f91b.js" crossorigin="anonymous"></script>
     <style>
-        body {
-            background-color: #eaf4ff;
+        body, html {
+            height: 100%;
+            margin: 0;
         }
-
+        .bg {
+            background: url('https://images.unsplash.com/photo-1581090700227-1e8e3fe75a9f') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(8px);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            z-index: -1;
+        }
+        .form-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+        }
+        .dashboard {
+            display: none;
+        }
         .sidebar {
             height: 100vh;
             background-color: #0056b3;
             padding-top: 20px;
             color: white;
         }
-
         .sidebar a {
             color: white;
             text-decoration: none;
             display: block;
             padding: 15px 20px;
             font-size: 16px;
-            transition: background 0.3s ease;
         }
-
         .sidebar a:hover {
             background-color: #339dff;
         }
-
-        .sidebar .logo {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .sidebar .logo i {
-            margin-right: 8px;
-        }
-
-        .icon {
-            margin-right: 10px;
-        }
-
         .content-frame {
             border: none;
             width: 100%;
-            height: 100vh;
+            height: 90vh;
+        }
+        .navbar-brand, .nav-link {
+            color: white !important;
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-2 sidebar">
-            <div class="logo">
-                <i class="fas fa-rocket"></i> NextGen
-            </div>
-            <a href="transaction.html" target="contentFrame"><i class="fas fa-exchange-alt icon"></i>Transaction</a>
-            <a href="suppliers.html" target="contentFrame"><i class="fas fa-truck icon"></i>Suppliers</a>
-            <a href="item.html" target="contentFrame"><i class="fas fa-boxes icon"></i>Items</a>
-            <a href="users.html" target="contentFrame"><i class="fas fa-users icon"></i>Users</a>
-            <a href="maintenance.html" target="contentFrame"><i class="fas fa-tools icon"></i>Maintenance</a>
-        </nav>
+<div class="bg"></div>
 
-        <!-- Main Content -->
-        <main class="col-md-10 p-0">
-            <iframe name="contentFrame" class="content-frame"></iframe>
-        </main>
+<!-- Login Form -->
+<div id="loginForm" class="form-container">
+    <h4 class="text-center mb-3">Inventory Management</h4>
+    <div class="mb-3">
+        <input type="text" id="loginUsername" class="form-control" placeholder="Username" />
+    </div>
+    <div class="mb-3">
+        <input type="password" id="loginPassword" class="form-control" placeholder="Password" />
+    </div>
+    <button class="btn btn-primary w-100" onclick="login()">Login</button>
+    <p class="text-center mt-3">Don't have an account? <a href="#" onclick="toggleForms()">Sign Up</a></p>
+</div>
+
+<!-- Signup Form -->
+<div id="signupForm" class="form-container" style="display:none;">
+    <h4 class="text-center mb-3">Sign Up</h4>
+    <input type="text" id="name" class="form-control mb-2" placeholder="Full Name" />
+    <input type="text" id="phone" class="form-control mb-2" placeholder="Phone Number" />
+    <input type="email" id="email" class="form-control mb-2" placeholder="Email" />
+    <input type="text" id="signupUsername" class="form-control mb-2" placeholder="Username" />
+    <input type="password" id="signupPassword" class="form-control mb-2" placeholder="Password" />
+    <input type="password" id="confirmPassword" class="form-control mb-2" placeholder="Confirm Password" />
+    <input type="file" id="image" class="form-control mb-2" />
+    <button class="btn btn-success w-100" onclick="signup()">Sign Up</button>
+    <p class="text-center mt-3">Already have an account? <a href="#" onclick="toggleForms()">Login</a></p>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand" href="#">NextGen</a>
+        <div class="ms-auto d-flex align-items-center">
+            <span class="navbar-text me-3" id="navbarUsername"></span>
+            <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <a href="transaction.html" target="contentFrame"><i class="fas fa-exchange-alt me-2"></i>Transaction</a>
+                <a href="suppliers.html" target="contentFrame"><i class="fas fa-truck me-2"></i>Suppliers</a>
+                <a href="item.html" target="contentFrame"><i class="fas fa-boxes me-2"></i>Items</a>
+                <a href="user.html" target="contentFrame"><i class="fas fa-users me-2"></i>Users</a>
+                <a href="maintenance.html" target="contentFrame"><i class="fas fa-tools me-2"></i>Maintenance</a>
+            </nav>
+            <main class="col-md-10 p-0">
+                <iframe name="contentFrame" class="content-frame" src="transaction.html"></iframe>
+            </main>
+        </div>
     </div>
 </div>
+
+<script>
+    const API_URL = "http://localhost:8080/api/user";
+
+    function toggleForms() {
+        const login = document.getElementById("loginForm");
+        const signup = document.getElementById("signupForm");
+        login.style.display = login.style.display === "none" ? "block" : "none";
+        signup.style.display = signup.style.display === "none" ? "block" : "none";
+    }
+
+    function validatePassword(password) {
+        return password.length >= 8 && /[A-Z]/.test(password);
+    }
+
+    async function signup() {
+        const name = document.getElementById("name").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const username = document.getElementById("signupUsername").value.trim();
+        const password = document.getElementById("signupPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const imageInput = document.getElementById("image");
+
+        if (!name || !phone || !email || !username || !password || !confirmPassword) {
+            alert("Please fill in all fields.");
+            return;
+        }
+        if (!validatePassword(password)) {
+            alert("Password must be at least 8 characters and contain at least one uppercase letter.");
+            return;
+        }
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // Read image as Base64 (optional)
+        let base64Image = "";
+        if (imageInput.files.length > 0) {
+            base64Image = await toBase64(imageInput.files[0]);
+        }
+
+        const userData = {
+            name,
+            phone,
+            email,
+            username,
+            password,
+            image: base64Image
+        };
+
+        try {
+            const res = await fetch(`${API_URL}/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+            const text = await res.text();
+            if (text === "SUCCESS") {
+                alert("Signup successful! Please login.");
+                toggleForms();
+            } else {
+                alert("Signup failed! Username might be taken or invalid data.");
+            }
+        } catch (err) {
+            alert("Error during signup: " + err.message);
+        }
+    }
+
+    async function login() {
+        const username = document.getElementById("loginUsername").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        if (!username || !password) {
+            alert("Please enter username and password.");
+            return;
+        }
+
+        const loginData = { username, password };
+
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(loginData),
+                credentials: "include"  // this is correct
+            });
+
+            const text = await res.text();
+            if (text === "SUCCESS") {
+                // Show dashboard, hide forms
+                document.getElementById("loginForm").style.display = "none";
+                document.getElementById("signupForm").style.display = "none";
+                document.getElementById("dashboard").style.display = "block";
+
+                // Get current user info to display username
+                await loadCurrentUser();
+            } else {
+                alert("Invalid username or password.");
+            }
+        } catch (err) {
+            alert("Error during login: " + err.message);
+        }
+    }
+
+    async function loadCurrentUser() {
+        try {
+            const res = await fetch(`${API_URL}/current`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if (res.ok) {
+                const user = await res.json();
+                if (user && user.username) {
+                    document.getElementById("navbarUsername").innerText = `Welcome, ${user.username}`;
+                }
+            }
+        } catch (err) {
+            console.error("Failed to load current user:", err);
+        }
+    }
+
+    async function logout() {
+        try {
+            const res = await fetch(`${API_URL}/logout`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if (res.ok) {
+                // Reload page to reset everything
+                location.reload();
+            }
+        } catch (err) {
+            alert("Logout failed: " + err.message);
+        }
+    }
+
+    // helper to convert file to base64
+    function toBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // On page load, check if user session exists and show dashboard if yes
+    window.onload = async () => {
+        try {
+            const res = await fetch(`${API_URL}/current`, {
+                method: "GET",
+                credentials: "include"
+            });
+            if (res.ok) {
+                const user = await res.json();
+                if (user && user.username) {
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("dashboard").style.display = "block";
+                    document.getElementById("navbarUsername").innerText = `Welcome, ${user.username}`;
+                }
+            }
+        } catch {
+            // no session
+        }
+    };
+</script>
 </body>
 </html>
-
